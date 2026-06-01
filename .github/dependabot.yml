@@ -1,0 +1,20 @@
+# Dependabot configuration
+# This repository has zero dependencies. This file exists purely
+# to look like a real project. If Dependabot opens a PR here,
+# it means it's found a way to update nothing — and we should
+# probably file a bug report.
+
+version: 2
+updates:
+  # GitHub Actions — the only thing in this repo that could actually have
+  # dependency updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "🤖 bot"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
