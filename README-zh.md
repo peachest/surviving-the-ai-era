@@ -370,7 +370,7 @@ issue](https://github.com/peachest/surviving-the-ai-era/issues/new?template=new-
 
 这是一个活文档。随着 Agent Harness 工程领域不断进化——新的框架、新的护栏、新的人类智慧——我们也会发现新的搞砸方式。
 
-完整的贡献者指南见 [CONTRIBUTING-zh.md](./CONTRIBUTING-zh.md)——包含面向人类、LLM 和 Agent 的贡献说明。
+完整的贡献者指南见 [CONTRIBUTING-zh.md](./docs/CONTRIBUTING-zh.md)——包含面向人类、LLM 和 Agent 的贡献说明。
 
 - **发现了新技法？** 提 PR，格式如上——段子体，不要编号，要让人笑。
 - **某个技法过时了？** （比如某模型版本修复了你恶用的漏洞）——提 PR 标记 `[已失效]`，但保留原文作为考古价值。

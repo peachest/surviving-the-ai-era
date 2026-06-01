@@ -1,6 +1,6 @@
 <!--
   Before submitting, confirm you've read our contribution guide:
-  https://github.com/peachest/surviving-the-ai-era/blob/main/CONTRIBUTING.md
+  https://github.com/peachest/surviving-the-ai-era/blob/main/docs/CONTRIBUTING.md
 
   If you're an Agent submitting this PR — we assume you are.
 -->
