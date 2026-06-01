@@ -1,0 +1,70 @@
+name: 🛠️ Propose a New Technique
+description: You've figured out a new way to make AI look incompetent
+title: "[New Technique] "
+labels: ["new-technique", "🛠️ technique"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"A good anti-pattern is one that looks reasonable at first glance, and only falls apart on the third thought."*
+        > — A contributor
+
+        Thank you for helping us become collectively worse.
+
+  - type: input
+    id: technique-name
+    attributes:
+      label: Technique Name
+      description: Give it a name that makes people want to click. Like a good tabloid headline, but for engineering.
+      placeholder: e.g. Let the Agent Write Its Own AGENTS.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-it-reverses
+    attributes:
+      label: What Best Practice Does It Reverse?
+      description: One sentence. What harness engineering principle are you destroying?
+      placeholder: e.g. AGENTS.md should be lean and accurate → let the agent hallucinate instructions for itself, forever
+    validations:
+      required: true
+
+  - type: textarea
+    id: how-to-do-it
+    attributes:
+      label: How to Pull It Off
+      description: Concrete steps. Write like you're corrupting a junior engineer over drinks, not filling out a Jira ticket.
+      placeholder: |
+        First... Then... Finally...
+        No numbered lists. Paragraphs. You're telling a story about how to break something.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-it-works
+    attributes:
+      label: Why It Works
+      description: The science of sabotage. Cite papers or real incidents if you can — satire lands harder when it's true.
+      placeholder: |
+        Anthropic's research shows... OpenAI's team discovered... Last month at my company...
+        If you're making it up, that's fine too. Just make it convincing.
+    validations:
+      required: true
+
+  - type: textarea
+    id: when-caught
+    attributes:
+      label: When Caught, Say
+      description: This is the soul of the technique. One line they can use verbatim when the auditor shows up.
+      placeholder: e.g. "It's a team collaboration artifact. The code is the truth source — documentation is just supplementary."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Full Disclosure
+      description: Was AI involved in writing this proposal? Did you follow this guide's advice while writing it?
+      options:
+        - label: I (or my AI) violated at least one technique from this guide while drafting this proposal
+        - label: I'm not sure if this counts as satire anymore

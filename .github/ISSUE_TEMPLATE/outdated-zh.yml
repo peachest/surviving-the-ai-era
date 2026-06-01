@@ -1,0 +1,39 @@
+name: ⚠️ 技法已失效
+description: 某个模型更新或框架升级修复了我们教的漏洞
+title: "[已失效] "
+labels: ["outdated", "⚠️ 失效"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"技术会进步，烂招会过时。这是好事——说明我们的对手在学习。"*
+        > — 一个感到欣慰的破坏者
+
+        报一条坏消息：我们的某个技法被堵上了。
+
+  - type: input
+    id: technique-name
+    attributes:
+      label: 哪个技法
+      description: 对应 README 里的技法名称。
+      placeholder: 例：2. 砍掉所有 Hooks
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-changed
+    attributes:
+      label: 发生了什么
+      description: 哪个模型版本、哪个框架版本、或者哪个产品更新让它失效了？
+      placeholder: |
+        例：Claude Opus 4.5 现在会自动检测并忽略 AGENTS.md 中互相矛盾超过三处的指令。
+        不幸的是，它只在矛盾数 ≥4 时才忽略——所以我们只需要把矛盾加到 5 处。
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: 还有救吗
+      description: 是否找到了新的绕过方法？如果没有，留空。
+      placeholder: 目前无解。建议后来者跳过此技法，或向 Anthropic 提 feature request 要求恢复旧行为。
