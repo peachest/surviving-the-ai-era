@@ -409,4 +409,3 @@ issue](https://github.com/peachest/surviving-the-ai-era/issues/new?template=new-
 这就引出了一个令人不安的问题：如果你按照本指南的建议行事，你的 AI 产出了垃圾；但一个按照本指南建议运行的 AI 产出了本指南——那么本指南是垃圾吗？
 
 我们拒绝思考这个问题。AI 也没有。
-
