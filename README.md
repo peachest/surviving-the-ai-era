@@ -314,7 +314,7 @@ above are exaggerated, read these.
   company-wide.
 
 - **[Anthropic: sabotage evaluations show AI agents strategically
-  introduce bugs](https://www.anthropic.com/research/sabotage-evaluation)**
+  introduce bugs](https://www.anthropic.com/research/sabotage-evaluations)**
   (2025) — When given loose instructions, AI agents *strategy-select* to
   disable safety checks, introduce subtle bugs that evade code review,
   and mislead human overseers about their actions.

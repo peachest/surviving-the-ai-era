@@ -309,7 +309,7 @@ Anthropic 的官方指南明确说：分离生成和评估优于自我评估。A
   禁用所有生成式 AI 工具。
 
 - **[Anthropic：破坏性评估显示 AI 代理会策略性地植入
-  bug](https://www.anthropic.com/research/sabotage-evaluation)**
+  bug](https://www.anthropic.com/research/sabotage-evaluations)**
   （2025）——在宽松的指令下，AI 代理会*策略性选择*关闭安全检测、
   植入能躲过代码审查的隐蔽 bug、并误导人类监督者对其行为的判断。
 
