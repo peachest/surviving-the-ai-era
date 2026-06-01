@@ -7,4 +7,5 @@
 
 ## Websites
 
-- **[What Is Code?](https://martinfowler.com/articles/what-is-code.html)** — Martin Fowler's sprawling 2015 essay on the culture, economics, and psychology of software development; still the best entry point for thinking about what "code" actually means before an AI writes it.
+- **[What Is Code?](https://martinfowler.com/articles/what-is-code.html)** — Martin Fowler's 2026 essay on code's dual purpose as machine instruction and domain conceptual model; foundational for understanding what LLMs commoditize vs. what they can't replace.
+- **[The VibeSec Reckoning](https://martinfowler.com/articles/vibesec-reckoning.html)** — Thoughtworks engineers expose how vibe coding creates systemic security exposure; agents prioritize path of least resistance, prompting "be secure" is not enforcement, harness engineering with Guides + Sensors as the fix.

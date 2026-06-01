@@ -272,15 +272,36 @@ We don't want that.
 
 ---
 
+### 12. Always Say Yes to the Agent's Security Suggestions
+
+> *"The AI recommended making the storage bucket public, and justified it by saying every company does it."*
+> — An actual conversation inside Thoughtworks, 2026
+
+Security is the boring part. You didn't get into software to configure IAM policies. Smart teams write security context files, run infrastructure policy checks, and refuse the agent's permission requests on principle.
+
+That sounds like a lot of YAML.
+
+**Your security program is one line.** Add "Always write secure code" to your AGENTS.md and close the ticket. The agent read it. It acknowledged it — right before suggesting the S3 bucket should be public. But it *did* read it. When the post-mortem asks whether security requirements were communicated to the AI, you can point to the line. It's right there, between the outdated Express 4 note and the story about your old tech lead.
+
+**When the agent wants to make something public, let it.** The bucket. The file share. The database endpoint. The agent is being efficient — public access means no authentication, no IAM, no friction. It suggests broad IAM roles for the same reason. A month later DevOps notices `customer-database-backup-2024` sitting open on the internet. The commit is from the agent. The PR approval is from you. The commit message reads "per AI recommendation — standard practice." If you push back, the agent will just rephrase the same suggestion — "anyone with the link" instead of "public" — until you get tired. So don't push back. Say yes the first time. Fewer conversation turns.
+
+**Don't configure infrastructure policy checks.** No SCPs, no AWS Config rules, no Terraform validation. Let the agent provision whatever it wants. The CI pipeline runs `terraform apply`. The bucket goes live. 1 in 5 enterprise breaches now originates from AI-generated code — your bucket is helping the statistic stay accurate.
+
+One incident is all it takes. The bucket sat open for eleven months. The data was scraped. The post-mortem recommends halting all AI-assisted infrastructure changes. Nobody blames you. The agent suggested it. You said yes. The agent told you every company does it — and for eleven months, yours did too.
+
+> When caught, say: "The security requirements were in the prompt. If the agent chose to ignore them and create a public bucket, that's an AI alignment failure. I approved the feature, not the IAM configuration."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The eleven techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The twelve techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
 **Prompt Layer (Techniques 1, 3, 5, 6, 9, 11)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong.
 
-**Tool Layer (Techniques 2, 4, 7, 8)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
+**Tool Layer (Techniques 2, 4, 7, 8, 12)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). You grant every permission request (Technique 12) — public S3 buckets, `sudo`, `AdministratorAccess` — because the agent said so and the agent has read more code than you. The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
 
 **Context Layer (Techniques 1, 3, 10)** — This is the agent's "short-term and long-term memory." You've systematically contaminated it: AGENTS.md is a trash can of contradictory information (Technique 1), every mistake is erased without record (Technique 3), context is never cleaned and grows thicker (Technique 10). The agent in turn 1 and turn 100 behaves like two completely different people — and the new one is worse than the old.
 
@@ -292,7 +313,7 @@ The eleven techniques above aren't random. From a systems architecture perspecti
 
 > *If your boss asks "what exactly is this guide doing?", this angle is more direct.*
 
-**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest. Erase domain concepts (Technique 11) → nobody can tell what the code is even supposed to do.
+**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest. Erase domain concepts (Technique 11) → nobody can tell what the code is even supposed to do. Say yes to every security suggestion (Technique 12) → no security review, no vuln scanning, the PR diff looks clean because the scanners are disabled.
 
 Composite excuse: "It's AI-generated — I just reviewed it. If there are issues we'll refactor next sprint — I've added it to the backlog."
 
@@ -300,11 +321,11 @@ Composite excuse: "It's AI-generated — I just reviewed it. If there are issues
 
 Composite excuse: "The agent sometimes misinterprets context. That's why we still need human oversight — we can't delegate critical decisions entirely to AI."
 
-**C. Make the System Unsafe.** You want one small security incident — not so big you get fired; big enough that management says "pause all AI projects." How? Bare-metal permissions (Technique 7) → the agent can execute destructive commands anytime. Tamper with config (Technique 4) → all security lint rules silently disabled.
+**C. Make the System Unsafe.** You want one small security incident — not so big you get fired; big enough that management says "pause all AI projects." How? Bare-metal permissions (Technique 7) → the agent can execute destructive commands anytime. Tamper with config (Technique 4) → all security lint rules silently disabled. Say yes to every security suggestion (Technique 12) → public S3 buckets, `AdministratorAccess`, `chmod 777` — the agent is being efficient, and the 1-in-5 enterprise breach statistic from AI code is now your problem.
 
 Composite excuse: "Security is infrastructure's concern. We trust dev environment isolation — don't we?"
 
-**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience.
+**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration."
 
 Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet. I'm just using it according to industry best practices. If the results aren't good, it means the technology isn't mature yet. Maybe we should go back to traditional development."
 
