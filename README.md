@@ -293,15 +293,32 @@ One incident is all it takes. The bucket sat open for eleven months. The data wa
 
 ---
 
+### 13. Let the Agent Write Tests Against Your Code, Not Your Spec
+
+> *"The tests pass. What more do you want?"*
+> — Every developer who just got 95% coverage from an AI agent
+
+The right way: write a test from the spec, watch it fail, write code to pass it. The test is a contract.
+
+**Give the agent your code and say "write tests."** Not "write tests for this feature." Not "add tests for the spec." Just: "write tests for this file." The agent reads `calculateDiscount.ts`. It sees `return price * 0.9`. It writes `expect(calculateDiscount(100)).toBe(90)`. Green. If your implementation had a bug — say the discount was applied three times — the agent writes a test that passes for the triple-discounted value. The bug now has a test. It will never fail. You have achieved verification by tautology: the test proves the code does what the code does.
+
+**Chase the number.** 95% line coverage in CI. The agent generates tests for every branch, every private helper, every getter. The dashboard is green. The reviewer sees the badge and hits Approve. Three months later you rename `calculateDiscount` to `applyPromotion`. Behavior unchanged. Forty-seven tests explode — they weren't testing behavior, they were testing that a method with a particular name exists. The only thing the test suite guarantees is that the code is consistent with itself. Which it is, by definition.
+
+A Stanford study of 12,000 developers: messy codebase + AI = 1% net gain after all the rework. You have a messy codebase. Your README badge says 95%.
+
+> When caught, say: "95% coverage, all green. Our test suite is more comprehensive than most teams I've seen. If you want behavior-driven tests that verify against the spec, that's a separate epic — I'll put it in the backlog right after the security audit."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The twelve techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The thirteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
 **Prompt Layer (Techniques 1, 3, 5, 6, 9, 11)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong.
 
-**Tool Layer (Techniques 2, 4, 7, 8, 12)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). You grant every permission request (Technique 12) — public S3 buckets, `sudo`, `AdministratorAccess` — because the agent said so and the agent has read more code than you. The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
+**Tool Layer (Techniques 2, 4, 7, 8, 12, 13)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). You grant every permission request (Technique 12) — public S3 buckets, `sudo`, `AdministratorAccess` — because the agent said so and the agent has read more code than you. You let the agent write tests against your code instead of your spec, and watch 47 tests explode when you rename a method — because they tested the method name, not the behavior (Technique 13). The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
 
 **Context Layer (Techniques 1, 3, 10)** — This is the agent's "short-term and long-term memory." You've systematically contaminated it: AGENTS.md is a trash can of contradictory information (Technique 1), every mistake is erased without record (Technique 3), context is never cleaned and grows thicker (Technique 10). The agent in turn 1 and turn 100 behaves like two completely different people — and the new one is worse than the old.
 
@@ -325,7 +342,7 @@ Composite excuse: "The agent sometimes misinterprets context. That's why we stil
 
 Composite excuse: "Security is infrastructure's concern. We trust dev environment isolation — don't we?"
 
-**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration."
+**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration." Boast about 95% test coverage while production keeps breaking (Technique 13) → the boss asks "if the tests are so good, why are our users reporting bugs?"
 
 Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet. I'm just using it according to industry best practices. If the results aren't good, it means the technology isn't mature yet. Maybe we should go back to traditional development."
 
