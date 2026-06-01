@@ -8,4 +8,3 @@
 ## Websites
 
 - **[What Is Code?](https://martinfowler.com/articles/what-is-code.html)** — Martin Fowler's sprawling 2015 essay on the culture, economics, and psychology of software development; still the best entry point for thinking about what "code" actually means before an AI writes it.
-

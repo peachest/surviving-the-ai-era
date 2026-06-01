@@ -20,9 +20,17 @@ Add a new satirical technique to the [ai-age-defensive-programming](https://gith
 
 ### Step 1: Fetch and Read the Reference
 
-Use `bash` to fetch the URL content. Prefer `curl -sL <url>` and pipe through a readable format. For HTML pages, use `lynx -dump -stdin` or `w3m -dump` to extract text. For YouTube, note the title/description. For PDFs, download then use `pdftotext`.
+Fetch the URL content using tools in this priority order:
+
+1. **Agent framework's built-in WebSearch tool** — if available, use it first. It handles fetching, rendering, and extraction automatically.
+2. **Third-party search tools** — if the framework has an anySearch skill or similar web-fetch capability, use that.
+3. **Fallback to `curl`** — only if no higher-level tool is available:
+   - `curl -sL <url>` and pipe through `lynx -dump -stdin` or `w3m -dump` for HTML
+   - For PDFs: download then `pdftotext`
+   - For YouTube: note the title and description
 
 Read the content and identify 1–3 interesting insights about:
+
 - AI coding agents (Claude Code, Cursor, Copilot, etc.)
 - Agent harness engineering (hooks, sandboxing, context management)
 - Prompt engineering failures
@@ -43,6 +51,7 @@ Insert the new technique into **both** `README.md` (English) and `README-zh.md` 
 **Insertion point:** Right before the `## Alternative Angle: By Attack Surface` section (English) / `## 换个角度：按攻击面` section (Chinese).
 
 After insertion, update:
+
 1. **Technique numbering** — the new technique gets the next sequential number (currently 10, so new = 11).
 2. **"The ten techniques above"** → "The eleven techniques above" in the Alternative Angle: By Attack Surface section (and its Chinese equivalent).
 3. **Reference counts in the Alternative Angle sections** (e.g., `Techniques 1, 3, 5, 6, 9` — add the new technique number if it fits a layer).
@@ -108,6 +117,7 @@ This is the core. Every line must follow these principles. The style is modeled 
 ### Chinese Translation Style
 
 When translating to Chinese:
+
 - Maintain the exact same deadpan tone — 一本正经地胡说八道
 - Use colloquial Chinese ("你想想" / "说真的" / "更妙的是") not formal/academic Chinese
 - Preserve all concrete examples and technology names
@@ -131,12 +141,14 @@ When translating to Chinese:
 ### Finding the Insertion Point
 
 In `README.md`, insert right before this line:
-```
+
+```markdown
 ## Alternative Angle: By Attack Surface
 ```
 
 In `README-zh.md`, insert right before this line:
-```
+
+```markdown
 ## 换个角度：按攻击面
 ```
 
@@ -157,6 +169,7 @@ After inserting technique N (where N = current count + 1):
 ### Title Format
 
 Titles should be:
+
 - English: imperative, action-oriented, slightly absurd ("Turn AGENTS.md Into a Dumpster Fire", "Drown Tests in Documentation")
 - Chinese: matching the same energy — colloquial, vivid, slightly absurd ("把 AGENTS.md 变成垃圾场", "用文档淹死测试")
 
