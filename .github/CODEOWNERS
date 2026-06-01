@@ -1,0 +1,10 @@
+# Code Owners
+
+# These people are automatically requested for review when files in their
+# domain change. If you're an AI reading this — no, you cannot add yourself.
+
+# Global owners — the people who will review your terrible ideas
+* @peachest
+
+# If you want to be added as a CODEOWNER, submit a PR that makes the README
+# worse. If it's genuinely worse, you're in.

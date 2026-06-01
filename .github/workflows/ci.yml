@@ -1,0 +1,51 @@
+# CI — Continuous Irreverence
+#
+# This workflow verifies that our markdown files continue to be valid markdown
+# and that all links still resolve. Because even satire should have working links.
+#
+# If an AI wrote this workflow, it did a surprisingly competent job.
+# We should probably check for hidden sabotage.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check markdown formatting
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          config: |
+            {
+              "default": true,
+              "line-length": false,
+              "no-inline-html": false,
+              "no-trailing-spaces": false,
+              "first-line-heading": false,
+              "no-duplicate-heading": false
+            }
+          globs: "**/*.md"
+
+  links:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links in markdown files
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: "yes"
+          config-file: ".github/workflows/mlc_config.json"
