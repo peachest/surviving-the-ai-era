@@ -1,15 +1,15 @@
 ---
 name: add-technique-from-reference
 description: |
-  Given a reference URL (article, blog, video, paper), fetch and extract its
-  content, identify a satirical AI defensive programming technique based on
-  the material, and add it to both the English and Chinese READMEs of the
-  ai-age-defensive-programming project. Use this skill whenever the user
-  provides a URL and asks to add a technique, mentions "add from reference,"
-  "turn this into a technique," "新技法," or wants to expand the README
-  with content from an external source. Also use when the user shares a link
-  about AI coding agents, harness engineering, prompt engineering, or LLM
-  failures and asks to incorporate it into the project.
+  Given a reference URL (article, blog, video, paper, incident report),
+  fetch its content and add it to the ai-age-defensive-programming READMEs.
+  Two modes: (1) failure-mode insight → new satirical technique in the
+  Techniques section, (2) production disaster → new entry in Real-World AI
+  Failures. Use when user provides a URL and says "add this," "新技法,"
+  "add technique," "add incident," "add to README," or wants to expand
+  the project from an external source. Also use for links about AI coding
+  agents, harness engineering, prompt engineering, LLM safety, or
+  agent-caused production outages.
 ---
 
 # Add Technique From Reference
@@ -40,13 +40,23 @@ Read the content and identify 1–3 interesting insights about:
 
 The insight must be a **real failure mode** — something that can plausibly go wrong. Satire only works when the kernel is true.
 
-### Step 2: Draft the Technique in English First
+### Step 2: Classify — Technique or Incident?
+
+Determine what kind of content the reference describes:
+
+**A. Failure-mode insight** — The reference discusses a general pattern, vulnerability, or anti-pattern in AI coding workflows (e.g., context degradation, over-feedback, self-modifying config). These become new satirical techniques.
+→ Go to **Step 3a: Add a New Technique**.
+
+**B. Real-world production disaster** — The reference documents a specific, named incident where an AI agent or LLM caused actual damage to a real organization (e.g., deleted databases, leaked secrets, production outages). These go into the Real-World AI Failures section.
+→ Go to **Step 3b: Add to Real-World AI Failures**.
+
+If the reference covers both (a disaster that also reveals a general pattern), add to both sections — the incident first, then optionally a technique that generalizes it.
+
+---
+
+### Step 3a: Add a New Technique
 
 Write the technique following the exact structure and style below. Write English first, then translate to Chinese.
-
-### Step 3: Insert Into Both READMEs
-
-Insert the new technique into **both** `README.md` (English) and `README-zh.md` (Chinese).
 
 **Insertion point:** Right before the `## Alternative Angle: By Attack Surface` section (English) / `## 换个角度：按攻击面` section (Chinese).
 
@@ -57,9 +67,52 @@ After insertion, update:
 3. **Reference counts in the Alternative Angle sections** (e.g., `Techniques 1, 3, 5, 6, 9` — add the new technique number if it fits a layer).
 4. **Numbered references in What You're Protecting** section if the new technique is relevant (e.g., `Drown tests in docs (Technique 5)` ).
 
+---
+
+### Step 3b: Add to Real-World AI Failures
+
+The `## Real-World AI Failures` section has two sub-sections. Classify the incident:
+
+- **`### Production Incidents`** — General AI/LLM failures: chatbot hallucinations, data leaks, research findings about AI misbehavior. NOT specifically about coding agents.
+- **`### Agent-Caused Production Destruction`** — Specific incidents where an AI *coding agent* (Claude Code, Cursor, Copilot, Replit AI, etc.) caused production damage through its own actions.
+
+Each entry follows this exact format:
+
+**English** (`README.md`):
+
+```markdown
+- **[Title describing the incident](url)**
+  (YYYY-MM) — Who/what happened. Key detail. Scale of damage.
+  Consequence or follow-up action.
+```
+
+**Chinese** (`README-zh.md`):
+
+```markdown
+- **[中文标题，描述事件](url)**
+  （YYYY-MM）——谁/发生了什么。关键细节。损害规模。
+  后果或后续行动。
+```
+
+**Style rules for incidents:**
+
+- Title is the link text — punchy, factual, names the agent/tool involved
+- Date in `(YYYY-MM)` format — if only year is known, use `(YYYY)`
+- Body: 2–3 sentences. First sentence = what happened. Second = why/how. Third = consequence.
+- No satire in the incident body — these are factual records, not jokes. The humor comes from the accumulated horror of reading them all.
+- Only the epigraph at the top of the section can be satirical.
+
+**Insertion point:** At the end of the appropriate sub-section, before any closing line like `*Know of another incident?*`.
+
+After adding, verify both READMEs have the same incidents in the same order.
+
+---
+
 ### Step 4: Verify Cross-Links
 
-Run `grep -c "^### [0-9]" README.md README-zh.md` to confirm both files have the same technique count. Check that all technique numbers in Alternative Angle sections are consistent.
+For techniques: run `grep -c "^### [0-9]" README.md README-zh.md` to confirm both files have the same technique count. Check that all technique numbers in Alternative Angle sections are consistent.
+
+For incidents: visually confirm both files list the same incidents in the same order under each sub-section.
 
 ---
 
