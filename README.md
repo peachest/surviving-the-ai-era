@@ -279,6 +279,8 @@ Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet
 
 This is a living document. As Agent Harness Engineering continues to evolve — new frameworks, new guardrails, new human wisdom — we'll discover new ways to screw things up.
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full contributor's guide — including instructions for humans, LLMs, and agents.
+
 - **Found a new technique?** Submit a PR, format as above — satirical style, no numbering, make people laugh.
 - **A technique is obsolete?** (e.g., a model version fixed the vulnerability you exploited) — Submit a PR marking `[DEPRECATED]`, but keep the original text for archaeological value.
 - **Thought of a meaner excuse?** Improve any "When caught, say" — this is the most essential part of the project.
