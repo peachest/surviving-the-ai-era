@@ -251,13 +251,34 @@ You won't.
 
 ---
 
+### 11. Erase Every Domain Concept From Your Code
+
+> *"Names are a form of premature optimization."*
+> — A developer who just renamed `User` to `X7b` and called it a refactor
+
+Code has always served two purposes. One: it tells the machine what to do. Two: it tells the next human what the machine is doing and why. The second purpose is what makes code maintainable, auditable, and — critically — fireable. If someone else can understand your code, they can replace you.
+
+We don't want that.
+
+**First, build a naming system so opaque it becomes job security.** Your e-commerce platform should have no trace of commerce. Rename `Product` to `EntityA`, `Cart` to `TransactionContext`, `Checkout` to `FinalizerPipeline`. Six months later a new hire opens the checkout module and finds three thousand lines of `FinalizerPipeline.execute(TransactionContext)`. They ask you what it does. "Read the code," you say. They read it. They still don't know. That's not a bug — that's tenure.
+
+**Second, rename everything every sprint.** The agent doesn't understand domain concepts — it matches patterns from its training data. So next sprint, rename `EntityA` to `ResourceNode` and `TransactionContext` to `WorkflowEnvelope`. The agent will happily update all references without asking why. It doesn't know why the names changed. It doesn't know the old names. It just follows instructions like a very fast intern who never asks questions. Three sprints later your codebase has accumulated four generations of naming, each partially overwritten, and the git blame shows the agent as the author of every line. When someone asks "who named this `WorkflowEnvelopeFactoryProviderDelegate`?" — not you. The agent did it.
+
+**Advanced move: seed the agent's naming with garbage.** Tell the agent "name this payment processing module after characters from Dune." It will faithfully produce `MuadDibPaymentStrategy`, `ArrakisTransactionSpice`, `BeneGesseritFraudDetector`. The code compiles. The tests pass. A year later your fintech startup gets acquired, and during due diligence the acquirer's engineering team opens the payment module. "Why is your fraud detection system named after a fictional religious order?" You look them in the eye: "It's a codename. For security." They nod. They've seen worse. They haven't.
+
+**The real genius of this technique:** agents don't understand what words mean. They've never bought anything online. They've never filed an insurance claim. They've never managed inventory. Every domain name they generate is a plausible hallucination — it looks right, it compiles, but it encodes zero understanding of the actual business. Your `ShippingCalculator` was named by a language model that learned the word "shipping" from GitHub repos and fan fiction in equal measure. Six months later someone asks why express shipping sometimes produces a negative delivery time, and the answer is: the agent named the variable `warpFactor`.
+
+> When caught, say: "The code is self-documenting. If you need domain knowledge to read code, you're not a real engineer. Also, the naming convention was in the AGENTS.md — oh wait, we deleted that section in sprint 3."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The ten techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The eleven techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
-**Prompt Layer (Techniques 1, 3, 5, 6, 9)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong.
+**Prompt Layer (Techniques 1, 3, 5, 6, 9, 11)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong.
 
 **Tool Layer (Techniques 2, 4, 7, 8)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
 
@@ -271,11 +292,11 @@ The ten techniques above aren't random. From a systems architecture perspective,
 
 > *If your boss asks "what exactly is this guide doing?", this angle is more direct.*
 
-**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest.
+**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest. Erase domain concepts (Technique 11) → nobody can tell what the code is even supposed to do.
 
 Composite excuse: "It's AI-generated — I just reviewed it. If there are issues we'll refactor next sprint — I've added it to the backlog."
 
-**B. Make AI Context Untrustworthy.** You want the agent mining with a rotten map. How? Poison AGENTS.md (Technique 1) → contradictory instructions, stale info, 500 lines of noise. Anti-ratchet (Technique 3) → mistakes erased from history. Infinite inflation (Technique 10) → critical instructions buried under 100k tokens of noise.
+**B. Make AI Context Untrustworthy.** You want the agent mining with a rotten map. How? Poison AGENTS.md (Technique 1) → contradictory instructions, stale info, 500 lines of noise. Anti-ratchet (Technique 3) → mistakes erased from history. Infinite inflation (Technique 10) → critical instructions buried under 100k tokens of noise. Erase domain concepts (Technique 11) → the codebase itself has no vocabulary the agent can learn from.
 
 Composite excuse: "The agent sometimes misinterprets context. That's why we still need human oversight — we can't delegate critical decisions entirely to AI."
 
