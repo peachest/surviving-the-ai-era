@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Read CONTRIBUTING First
+    url: https://github.com/peachest/surviving-the-ai-era/blob/main/CONTRIBUTING.md
+    about: Before you open an issue — learn how to make this project worse

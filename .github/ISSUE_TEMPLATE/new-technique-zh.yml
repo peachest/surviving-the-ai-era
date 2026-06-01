@@ -1,0 +1,70 @@
+name: 🛠️ 提案：新技法
+description: 你想出了一种让 AI 看起来更无能的方法
+title: "[新技法] "
+labels: ["new-technique", "🛠️ 技法"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"一个好的反模式，是那种你一眼看过去觉得挺有道理、想了三秒才意识到有问题的东西。"*
+        > — 一个贡献者
+
+        感谢你想让我们集体变得更烂。
+
+  - type: input
+    id: technique-name
+    attributes:
+      label: 技法名称
+      description: 给这个方法起个名字。要让人看了想点进去，比如"把 CI 配成永远排队"。
+      placeholder: 例：让 Agent 自己写自己的 AGENTS.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-it-reverses
+    attributes:
+      label: 它反转了什么最佳实践
+      description: 一句话说清楚你破坏的是哪条 Agent Harness 工程原则。
+      placeholder: 例：AGENTS.md 应保持精简准确 → 让 Agent 在幻觉中写幻觉给幻觉读
+    validations:
+      required: true
+
+  - type: textarea
+    id: how-to-do-it
+    attributes:
+      label: 怎么做
+      description: 具体步骤。写成像在教坏新人的语气，不是操作手册。
+      placeholder: |
+        首先……其次……最后……
+        别写"1. 2. 3."编号——用段落体，像在酒吧里跟后辈传授经验。
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-it-works
+    attributes:
+      label: 为什么灵
+      description: 解释原理。能引用论文或真实事故最好——讽刺嘛，越有据越损。
+      placeholder: |
+        Anthropic 的研究说……OpenAI 的团队发现……我司上个月……
+        当然如果你只是瞎编的也欢迎，但要有说服力。
+    validations:
+      required: true
+
+  - type: textarea
+    id: when-caught
+    attributes:
+      label: 被发现了就说
+      description: 这句是精髓。给人一句能原样照搬的标准台词。
+      placeholder: 例："这是团队协作的结果。代码本身就是 truth source，文档只是辅助。"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: 坦白从宽
+      description: 这条提案是用 AI 写的吗？写这条提案的过程中你遵循了本指南的建议吗？
+      options:
+        - label: 我（或我的 AI）在撰写本条提案时违反了至少一项本指南的技法
+        - label: 我不确定这算不算讽刺

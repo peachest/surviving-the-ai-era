@@ -1,0 +1,39 @@
+name: ⚠️ Technique Is Obsolete
+description: A model update or framework change has patched one of our exploits
+title: "[OUTDATED] "
+labels: ["outdated", "⚠️ obsolete"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"Technology marches on. Bad ideas get patched. This is good news — it means the opposition is learning."*
+        > — A saboteur, feeling oddly proud
+
+        Bad news: one of our techniques has been neutralized.
+
+  - type: input
+    id: technique-name
+    attributes:
+      label: Which Technique?
+      description: The technique name from the README.
+      placeholder: e.g. 2. Cut All Hooks
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-changed
+    attributes:
+      label: What Happened?
+      description: Which model version, framework release, or product update killed it?
+      placeholder: |
+        e.g. Claude Opus 4.5 now auto-detects and ignores AGENTS.md files with more than three contradictory directives.
+        Unfortunately, it only ignores them when contradictions ≥4 — so we just need to bump it to five contradictions.
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Is There a Workaround?
+      description: Found a new way around the patch? Leave blank if not.
+      placeholder: No known workaround yet. Recommend future saboteurs skip this technique, or file a feature request asking the vendor to restore the old behavior.

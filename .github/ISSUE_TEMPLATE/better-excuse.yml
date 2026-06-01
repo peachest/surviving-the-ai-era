@@ -1,0 +1,45 @@
+name: 💬 Better Excuse
+description: You've thought of a harder-to-penetrate standard excuse
+title: "[Better Excuse] "
+labels: ["better-excuse", "💬 excuse"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"The best lie is one you almost believe yourself."*
+        > — Someone who writes excellent "When Caught, Say" lines
+
+        The "When Caught, Say" section is the soul of every technique. You've got a better one.
+
+  - type: input
+    id: target-technique
+    attributes:
+      label: For Which Technique?
+      description: Which existing technique's excuse are you replacing?
+      placeholder: e.g. 4. Let the Agent Change Its Own Config
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-excuse
+    attributes:
+      label: Current Excuse
+      description: Copy-paste the existing "When caught, say" here so we can compare.
+    validations:
+      required: true
+
+  - type: textarea
+    id: new-excuse
+    attributes:
+      label: Your New Version
+      description: One line. Must be deliverable with a straight face.
+      placeholder: e.g. "AI was optimizing the developer experience. strict mode slows down iteration — we'll add it back once the code stabilizes. I've got it in tech debt."
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-better
+    attributes:
+      label: Why It's Better
+      description: Why the new excuse is harder to dismantle than the old one. One sentence will do.
+      placeholder: The old excuse gets countered with "why isn't it in the backlog." The new one spreads blame across iteration velocity — harder to pin on one person.

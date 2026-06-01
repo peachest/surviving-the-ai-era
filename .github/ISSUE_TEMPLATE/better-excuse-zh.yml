@@ -1,0 +1,45 @@
+name: 💬 更好的借口
+description: 你想到了一句更难被拆穿的标准台词
+title: "[借口优化] "
+labels: ["better-excuse", "💬 借口"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > *"最好的谎言，是你自己都差点信了的那个。"*
+        > — 一个擅长写"被发现了就说"的人
+
+        "被发现了就说"是每个技法的灵魂。你想到了一句更好的，欢迎提交。
+
+  - type: input
+    id: target-technique
+    attributes:
+      label: 针对哪个技法
+      description: 你想替换哪条的现有借口？
+      placeholder: 例：4. 让 Agent 自己改配置
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-excuse
+    attributes:
+      label: 现行借口
+      description: 复制粘贴一下现在的"被发现了就说"。
+    validations:
+      required: true
+
+  - type: textarea
+    id: new-excuse
+    attributes:
+      label: 你的新版本
+      description: 一句话，能被当成标准台词照搬的。
+      placeholder: 例："AI 在优化开发体验。strict 太影响迭代了，等代码稳定了再加回来——我记到 tech debt 里了。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-better
+    attributes:
+      label: 为什么更好
+      description: 新借口比旧借口更难以反驳的理由。一句话就行。
+      placeholder: 旧版容易被追问 '你怎么没记到 backlog'，新版把锅分给了迭代节奏。
