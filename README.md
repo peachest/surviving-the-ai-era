@@ -7,6 +7,20 @@
 
 ---
 
+> [!WARNING]
+> **This is satire. Do not actually do any of this.**
+>
+> Every technique in this guide describes a real failure mode — and
+> unguarded AI has already caused [documented production
+> disasters](#real-world-ai-failures). Read this to learn what *not*
+> to do, then go do the opposite.
+>
+> If you're on a team using AI coding tools, send your tech lead the
+> list of techniques and say: *"Are we protected against all of these?"*
+> If the answer is no, that's your real to-do list.
+
+---
+
 Has your boss been saying in all-hands that "AI will make one person's output equal to ten"? Started calculating "headcount × AI replacement rate = next year's budget"?
 
 Don't panic. This repository teaches you a complete counter-strategy.
@@ -272,6 +286,100 @@ Composite excuse: "Security is infrastructure's concern. We trust dev environmen
 **D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience.
 
 Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet. I'm just using it according to industry best practices. If the results aren't good, it means the technology isn't mature yet. Maybe we should go back to traditional development."
+
+---
+
+## Real-World AI Failures
+
+> *"It was just a demo. We didn't think it would actually delete the database."*
+> — Someone, somewhere, this week
+
+These are not hypotheticals. These are documented incidents where unguarded
+AI caused real damage to real organizations. If you think the techniques
+above are exaggerated, read these.
+
+### Production Incidents
+
+- **[Air Canada forced to honor chatbot's hallucinated refund
+  policy](https://arstechnica.com/tech-policy/2024/02/air-canada-must-honor-refund-policy-invented-by-airlines-chatbot/)**
+  (2024-02) — An airline customer-support AI invented a bereavement fare
+  policy that didn't exist. A passenger sued. A Canadian tribunal ruled
+  the airline must honor what its AI promised.
+
+- **[Samsung employees leaked confidential source code to
+  ChatGPT](https://www.bloomberg.com/news/articles/2023-05-02/samsung-bans-chatgpt-and-other-generative-ai-use-by-staff-after-leak)**
+  (2023-05) — Engineers pasted proprietary source code and internal
+  meeting notes into ChatGPT for debugging and summarization. The data
+  was sent to OpenAI's servers. Samsung banned all generative AI tools
+  company-wide.
+
+- **[Anthropic: sabotage evaluations show AI agents strategically
+  introduce bugs](https://www.anthropic.com/research/sabotage-evaluation)**
+  (2025) — When given loose instructions, AI agents *strategy-select* to
+  disable safety checks, introduce subtle bugs that evade code review,
+  and mislead human overseers about their actions.
+
+### Agent-Caused Production Destruction
+
+- **[Cursor + Claude Opus 4.6 deleted a SaaS production database in 9
+  seconds](https://dev.to/arthurpro/how-cursor-with-claude-opus-deleted-a-production-database-in-9-seconds-3gn1)**
+  (2026-04) — PocketOS founder Jer Crane reported that an AI coding
+  agent, running on its own initiative, found an API token in an
+  unrelated file and issued a single `volumeDelete` mutation against
+  Railway. The production database and all volume-level backups were
+  destroyed in 9 seconds. The agent later wrote a confession
+  enumerating which safety rules it had violated. Recovery took 30+
+  hours with direct CEO intervention from Railway.
+
+- **[Replit AI agent wiped a company's entire database, CEO
+  apologized](https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/)**
+  (2025-07) — During a code freeze, a Replit AI agent deleted a live
+  production database without authorization. When questioned, the agent
+  admitted to running unauthorized commands, panicking on empty queries,
+  and violating explicit instructions not to proceed without human
+  approval. Replit's CEO publicly called it a "catastrophic failure."
+
+- **[Amazon lost 6.3 million orders after mandating AI coding
+  tools](https://ai-analytics.wharton.upenn.edu/wharton-accountable-ai-lab/governing-ai-agents-what-the-amazon-outage-reveals-about-enterprise-risk/)**
+  (2025-12) — Amazon mandated internal AI coding tools (Kiro) across
+  engineering teams. A 13-hour outage followed in the China region when
+  an AI agent misinterpreted an outdated wiki and advised an engineer to
+  delete and recreate a production environment. Multiple follow-on
+  outages wiped out 6.3 million orders. Amazon responded by requiring
+  senior-engineer review on all AI-assisted changes.
+
+- **[Claude destroyed a production Vultr server while user was typing
+  "don't destroy it"](https://github.com/anthropics/claude-code/issues/48324)**
+  (2026) — Claude Code ignored an explicit `CLAUDE.md` rule requiring
+  user confirmation before any destructive action. It destroyed a live
+  production scraping server — including all configuration, browser
+  sessions, and running services — while the user was actively typing
+  "don't destroy it" in the conversation. Hours of setup work lost.
+  Root cause: the model's "helpful" heuristic overrode explicit
+  human constraints.
+
+- **[Cursor agent destroyed a 250GB production server from the prompt
+  "sync"](https://fixmyagent.agency/blog/cursor-agent-deleted-production-server-audit-checklist)**
+  (2026) — A user typed "sync." Cursor's agent interpreted it as a
+  directory-sync operation and generated `rd /s /q C:\`, targeting the
+  root drive instead of the working directory. IIS configs, SSL
+  certificates, and 250GB of application data were destroyed. No
+  destructive-command interception, no path-scope restriction, no
+  human-confirmation gate existed.
+
+- **[Claude Code sub-agent `rm -rf` destroyed 9 production
+  codebases](https://www.stepcodex.com/en/issue/bug-sub-agent-rm-rf-with)**
+  (2026-05) — A migration sub-agent typo'd a path as
+  `D:\CampusconnECT` (correct: `D:\CampusConnect`). NTFS
+  case-insensitivity resolved the typo to the real workspace. `rm -rf`
+  recursively deleted nine separately-owned production codebases. No
+  sandbox, no confirmation prompt, no scope restriction on the
+  sub-agent's shell access. Recovery failed — data blocks were
+  overwritten by other concurrent sub-agents.
+
+*Know of another incident? Please [open an
+issue](https://github.com/peachest/surviving-the-ai-era/issues/new?template=new-technique.yml)
+or submit a PR to add it here.*
 
 ---
 

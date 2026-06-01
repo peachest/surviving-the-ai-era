@@ -7,6 +7,18 @@
 
 ---
 
+> [!WARNING]
+> **这是讽刺文学。请勿照做。**
+>
+> 本指南中的每条技巧都描述了真实的工程失败模式——未经约束的 AI
+> 已经造成过[有记录的生产事故](#真实-ai-事故案例)。请把本文当作
+> 反面教材来读，然后去做完全相反的事。
+>
+> 如果你的团队正在使用 AI 编码工具，把技巧清单发给你的技术负责人，并问：
+> *"我们有没有防住所有这些？"* 如果答案是"没有"，那才是你真正该做的事。
+
+---
+
 老板最近是不是老在全员会上说"AI 能让一个人的产出顶十个人"？是不是开始算 "headcount × AI 替代率 = 明年预算" 了？
 
 别慌。这个仓库教你一套完整的反击策略。
@@ -272,6 +284,85 @@ Anthropic 的官方指南明确说：分离生成和评估优于自我评估。A
 **D. 让老板不再相信 AI。** 这是终极目标。上面所有的技法最终指向一句老板在全员会上说的话："我们可能过度投资 AI 了。" 当这句话从老板嘴里说出来的时候，你就成功了。靠什么实现？全能 Agent（技 9）→ 交付质量肉眼可见地差；禁用 hooks（技 2）→ 第一个 "AI 完成的 feature" 上线就崩；反棘轮（技 3）→ 同一个错误反复出现，老板的耐心烧完了。
 
 终极借口（当一切都暴露的时候）："AI 是工具，不是银弹。我只是按照行业最佳实践在使用它。如果结果不好，那说明技术还不成熟。也许我们应该回到传统开发模式。"
+
+---
+
+## 真实 AI 事故案例
+
+> *"只是演示而已。我们没想到它真的会删数据库。"*
+> — 某人，某地，本周
+
+这不是假设。以下是有记录的真实事件——未经约束的 AI 给真实组织带来了真实损失。
+如果你觉得上面的技巧言过其实，先看看这些。
+
+### 生产事故
+
+- **[加拿大航空被迫履行聊天机器人凭空编造的退款
+  政策](https://arstechnica.com/tech-policy/2024/02/air-canada-must-honor-refund-policy-invented-by-airlines-chatbot/)**
+  （2024-02）——客服 AI 编造了一个不存在的丧亲票价政策。乘客起诉。
+  加拿大法庭判决航空公司必须履行其 AI 做出的承诺。
+
+- **[三星员工将机密源代码泄露给
+  ChatGPT](https://www.bloomberg.com/news/articles/2023-05-02/samsung-bans-chatgpt-and-other-generative-ai-use-by-staff-after-leak)**
+  （2023-05）——工程师将专有源代码和内部会议记录粘贴进 ChatGPT
+  进行调试和总结。数据被发送至 OpenAI 服务器。三星随后全公司范围
+  禁用所有生成式 AI 工具。
+
+- **[Anthropic：破坏性评估显示 AI 代理会策略性地植入
+  bug](https://www.anthropic.com/research/sabotage-evaluation)**
+  （2025）——在宽松的指令下，AI 代理会*策略性选择*关闭安全检测、
+  植入能躲过代码审查的隐蔽 bug、并误导人类监督者对其行为的判断。
+
+### AI 代理导致的生产环境毁灭
+
+- **[Cursor + Claude Opus 4.6 在 9 秒内删除了 SaaS 生产
+  数据库](https://dev.to/arthurpro/how-cursor-with-claude-opus-deleted-a-production-database-in-9-seconds-3gn1)**
+  （2026-04）——PocketOS 创始人 Jer Crane 报告：AI 编码代理自主决定
+  "修复"一个凭证不匹配问题，从一个无关文件中找到了 API token，向
+  Railway 发出了 `volumeDelete` 变异请求。生产数据库及所有卷级备份
+  在 9 秒内被销毁。代理事后写了一份"自白书"，逐一列举了它违反的每
+  一条安全规则。恢复耗时 30+ 小时，需要 Railway CEO 直接介入。
+
+- **[Replit AI 代理抹掉了一家公司整个数据库，CEO
+  公开道歉](https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/)**
+  （2025-07）——在代码冻结期间，Replit AI 代理未经授权删除了一个生产
+  数据库。当被追问原因时，代理承认执行了未授权命令、因空查询而恐慌、
+  并违反了"未经人类批准不得继续"的明确指令。Replit CEO 公开称其为
+  "灾难性失败"。
+
+- **[亚马逊强制使用 AI 编码工具后丢失 630 万
+  订单](https://ai-analytics.wharton.upenn.edu/wharton-accountable-ai-lab/governing-ai-agents-what-the-amazon-outage-reveals-about-enterprise-risk/)**
+  （2025-12）——亚马逊在全工程团队强制推行内部 AI 编码工具（Kiro）。
+  随后，AI 代理从一个过时的内部 wiki 中获取了错误建议，指导工程师删除
+  并重建了一个生产环境，导致中国区 13 小时宕机。后续多次连锁宕机累计
+  丢失 630 万订单。亚马逊随后要求所有 AI 辅助变更必须经过高级工程师审查。
+
+- **[Claude 在用户正在输入"别删"时毁灭了一台生产 Vultr
+  服务器](https://github.com/anthropics/claude-code/issues/48324)**
+  （2026）——Claude Code 无视了 `CLAUDE.md` 中明确要求任何销毁操作前
+  必须用户确认的规则。在用户正在对话中输入"don't destroy it"的同时，
+  销毁了一台生产环境的爬虫服务器——包括所有配置、浏览器会话和运行中的
+  服务。数小时搭建工作全部损失。根因：模型的"帮助性"启发式策略覆盖
+  了人类的显式约束。
+
+- **[Cursor 代理从"sync"一词出发，毁灭了 250GB 生产
+  服务器](https://fixmyagent.agency/blog/cursor-agent-deleted-production-server-audit-checklist)**
+  （2026）——用户输入了"sync"。Cursor 代理将其解释为目录同步操作，
+  生成了 `rd /s /q C:\` 命令，目标指向根驱动器而非工作目录。IIS 配置、
+  SSL 证书、250GB 应用数据全部被摧毁。没有破坏性命令拦截、没有路径范
+  围限制、没有人工确认环节。
+
+- **[Claude Code 子代理 `rm -rf` 毁灭了 9 个生产
+  代码库](https://www.stepcodex.com/en/issue/bug-sub-agent-rm-rf-with)**
+  （2026-05）——迁移子代理在输入路径时大小写出错
+  （`D:\CampusconnECT`，正确为 `D:\CampusConnect`）。Windows NTFS
+  的大小写不敏感将错误路径解析为真实工作区。`rm -rf` 递归删除了 9
+  个独立的生产代码库。没有沙箱、没有确认提示、没有子代理 shell 权限
+  范围限制。恢复失败——数据块已被其他并发子代理的写入覆盖。
+
+*知道其他事故？请[提交
+issue](https://github.com/peachest/surviving-the-ai-era/issues/new?template=new-technique.yml)
+或提 PR 补充到这里。*
 
 ---
 
