@@ -48,7 +48,7 @@ We currently support:
 | Version | Supported          |
 | ------- | ------------------ |
 | main    | :white_check_mark: |
-| < 1.0   | :white_check_mark: (there's only one version) |
+| < 1.0   | :white_check_mark: |
 
 No, seriously. This is a living document. There is one version. If you find a
 vulnerability, it's in the current version. We'll fix it. The concept of

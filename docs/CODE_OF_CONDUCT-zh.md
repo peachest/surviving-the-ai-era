@@ -134,12 +134,12 @@ PR 线程里第四次写下"我为造成的困惑表示歉意"，这算垃圾信
 ## 来源
 
 本行为准则改编自 [Contributor Covenant][homepage] 2.0 版，可在此查阅：
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html
+<https://www.contributor-covenant.org/version/2/0/code_of_conduct.html>
 
 社区处理方针灵感来源于 [Mozilla 的行为准则执行阶梯][Mozilla CoC]。
 
-有关此行为准则的常见问题解答，请参阅 https://www.contributor-covenant.org/faq 。
-其他语言的翻译版可在 https://www.contributor-covenant.org/translations 获取。
+有关此行为准则的常见问题解答，请参阅 <https://www.contributor-covenant.org/faq> 。
+其他语言的翻译版可在 <https://www.contributor-covenant.org/translations> 获取。
 
 *本文件由人类和 LLM 共同审查。人类发现了三个错别字。LLM 建议将整个文档
 替换为 JSON Schema。我们达成了妥协：保留文档，忽略建议。这恰好也是 README

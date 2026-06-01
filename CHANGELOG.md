@@ -10,6 +10,7 @@ are mostly for dramatic effect.
 ## [Unreleased]
 
 ### Added
+
 - Prominent `[!WARNING]` disclaimer at top of both READMEs, with link to failure cases
 - `## Real-World AI Failures` section in both READMEs — 9 documented incidents across two
   sub-sections (Production Incidents, Agent-Caused Production Destruction), with dates and
@@ -26,6 +27,7 @@ are mostly for dramatic effect.
 - .github/workflows/ci.yml with markdown linting and link checking
 
 ### Changed
+
 - README WARNING block tightened from verbose inline cases to concise pointer to failure
   section
 - CODE_OF_CONDUCT enriched with 10 satirical asides (AI-specific enforcement
@@ -34,6 +36,7 @@ are mostly for dramatic effect.
 ## [0.1.0] - 2025-06-01
 
 ### Added
+
 - Initial public release
 - README.md and README-zh.md covering 10+ defensive programming techniques
 - CONTRIBUTING.md and CONTRIBUTING-zh.md with human/LLM/agent contribution tiers

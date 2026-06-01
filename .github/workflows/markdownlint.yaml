@@ -5,3 +5,4 @@ config:
   no-trailing-spaces: false
   first-line-heading: false
   no-duplicate-heading: false
+  no-blanks-blockquote: false
