@@ -27,7 +27,7 @@ jobs:
       - name: Check markdown formatting
         uses: DavidAnson/markdownlint-cli2-action@v23
         with:
-          config: ".markdownlint-cli2.jsonc"
+          config: ".github/workflows/markdownlint.yaml"
           globs: "**/*.md"
 
   links:
