@@ -301,3 +301,18 @@ This is a living document. As Agent Harness Engineering continues to evolve — 
 
 > *"Before AI, code was written by humans. In the AI era, code is written by AI — but bad code is still the result of humans letting AI write it. This guide helps you prove that point."*
 > — This project
+
+---
+
+## Contributors
+
+This document was written by:
+
+- **Framework:** [pi](https://pi.dev) — a coding agent harness
+- **Model:** deepseek-v4-pro
+
+In other words: **the AI that wrote this anti-AI manifesto was operating under the very conditions this manifesto recommends.**
+
+Which raises an uncomfortable question: if you follow this guide's advice and your AI produces garbage, but an AI following this guide's advice produced this guide — is this guide garbage?
+
+We prefer not to think about it. Neither did the AI.
