@@ -1,118 +1,80 @@
 ---
 name: add-technique-from-reference
 description: |
-  Given a reference URL (article, blog, video, paper, incident report),
-  fetch its content and add it to the ai-age-defensive-programming READMEs.
-  Two modes: (1) failure-mode insight → new satirical technique in the
-  Techniques section, (2) production disaster → new entry in Real-World AI
-  Failures. Use when user provides a URL and says "add this," "新技法,"
-  "add technique," "add incident," "add to README," or wants to expand
-  the project from an external source. Also use for links about AI coding
-  agents, harness engineering, prompt engineering, LLM safety, or
-  agent-caused production outages.
+  Two modes: (1) failure-mode insight → new satirical technique, (2) production disaster → new entry in Real-World AI Failures. MUST trigger whenever the user provides ANY external URL (article, blog, video, paper, incident report, news story) and says anything like "add this," "新技法," "add technique," "add incident," "add to README," "加个技法," "收录," "添加引用," "add reference," "收录这个," "收一下这个," "放到项目里," "加到项目中," or clearly wants to expand the project from an external source. Also force-trigger for ANY link about AI coding agents, harness engineering, prompt engineering, LLM safety, agent-caused production outages, vibe coding failures, Cursor/Claude Code/Copilot incidents, or AI agent security research — even if the user does not explicitly ask to "add" it. Core workflow: fetch URL → check relevance (ask_user_question if content does not match project themes) → plan with todo → deduplicate (ask_user_question if uncertain) → classify → write → insert → verify.
 ---
 
 # Add Technique From Reference
 
-Add a new satirical technique to the [ai-age-defensive-programming](https://github.com/peachest/surviving-the-ai-era) READMEs (English + Chinese), inspired by a reference URL the user provides.
+## Step 0: Plan with `todo`
+
+Before starting, create a lightweight todo task list (3-5 items) to track progress. Mark each `in_progress` before starting, `completed` right after finishing. Exactly one task in_progress at a time.
+
+Typical plan:
+```text
+1. Fetch and extract insights from the URL
+2. Add reference URL to references/index.md
+3. Deduplicate against existing techniques; classify as technique vs incident
+4. Write content (EN + ZH) and insert into both READMEs
+5. Update cross-references and verify
+```
+
+Do NOT create overly granular tasks — keep it to this high-level flow.
 
 ## Workflow
 
 ### Step 1: Fetch and Read the Reference
 
-Fetch the URL content using tools in this priority order:
+Fetch the URL content. Try tools in this order:
+1. **WebSearch / web_fetch** — use first if available.
+2. **anySearch skill** or similar third-party fetch.
+3. **`curl` fallback** — `curl -sL <url> | lynx -dump -stdin` for HTML; `pdftotext` for PDFs.
 
-1. **Agent framework's built-in WebSearch tool** — if available, use it first. It handles fetching, rendering, and extraction automatically.
-2. **Third-party search tools** — if the framework has an anySearch skill or similar web-fetch capability, use that.
-3. **Fallback to `curl`** — only if no higher-level tool is available:
-   - `curl -sL <url>` and pipe through `lynx -dump -stdin` or `w3m -dump` for HTML
-   - For PDFs: download then `pdftotext`
-   - For YouTube: note the title and description
+### Step 1b: Check Relevance — Ask User If Unsure
 
-Read the content and identify 1–3 interesting insights about:
+After reading the content, ask: does the article's core insight belong in this project (AI coding agent failures, satirical defensive programming)?
 
-- AI coding agents (Claude Code, Cursor, Copilot, etc.)
-- Agent harness engineering (hooks, sandboxing, context management)
-- Prompt engineering failures
-- LLM reliability or safety issues
-- Developer workflows with AI
-- Production incidents involving AI
+If the article is about something else entirely (e.g., general tech news, non-AI security, frontend design, Python vs Go debate, Kubernetes migration, etc.) — **do NOT silently skip or force-fit it.** Use `ask_user_question`:
 
-The insight must be a **real failure mode** — something that can plausibly go wrong. Satire only works when the kernel is true.
+```
+question: "This article is about [X]. It doesn't seem to match the project's focus on AI coding agent failures. Do you still want to add it?"
+header: "Intent check"
+options:
+  - "Yes, find a connection and add as technique/incident"
+  - "No, skip it"
+  - "Let me explain what I want"
+```
 
-### Step 2: Classify — Technique or Incident?
+If the article's content clearly matches the project themes (AI coding agents, harness failures, production incidents), proceed directly. Only ask when it's uncertain.
 
-Determine what kind of content the reference describes:
+### Step 2: Deduplicate Before Writing
 
-**A. Failure-mode insight** — The reference discusses a general pattern, vulnerability, or anti-pattern in AI coding workflows (e.g., context degradation, over-feedback, self-modifying config). These become new satirical techniques.
-→ Go to **Step 3a: Add a New Technique**.
+Read all existing `### N.` techniques in `README.md`. For each insight you extracted, check:
 
-**B. Real-world production disaster** — The reference documents a specific, named incident where an AI agent or LLM caused actual damage to a real organization (e.g., deleted databases, leaked secrets, production outages). These go into the Real-World AI Failures section.
-→ Go to **Step 3b: Add to Real-World AI Failures**.
+| Question | If Yes | If No |
+|---|---|---|
+| Is this the **core joke** of an existing technique? | **Stop.** Enrich existing technique or skip. | Continue. |
+| Is this a different **example** of the same failure mode? | **Stop.** Existing technique owns this territory. | Proceed. |
 
-If the reference covers both (a disaster that also reveals a general pattern), add to both sections — the incident first, then optionally a technique that generalizes it.
+**When uncertain, use `ask_user_question`:**
+```
+question: "This insight overlaps with technique [N]. Novel enough for a new technique?"
+header: "Dedup check"
+options:
+  - "Yes — distinct enough"
+  - "No — enrich existing instead"
+  - "Not sure"
+```
 
----
+Only proceed if the insight is genuinely novel. If none are novel, add the reference to `references/index.md` and stop.
 
-### Step 3a: Add a New Technique
+### Step 3: Draft the Technique in English First
 
 Write the technique following the exact structure and style below. Write English first, then translate to Chinese.
 
-**Insertion point:** Right before the `## Alternative Angle: By Attack Surface` section (English) / `## 换个角度：按攻击面` section (Chinese).
+### Step 4: Insert and Update Cross-References
 
-After insertion, update:
-
-1. **Technique numbering** — the new technique gets the next sequential number (currently 10, so new = 11).
-2. **"The ten techniques above"** → "The eleven techniques above" in the Alternative Angle: By Attack Surface section (and its Chinese equivalent).
-3. **Reference counts in the Alternative Angle sections** (e.g., `Techniques 1, 3, 5, 6, 9` — add the new technique number if it fits a layer).
-4. **Numbered references in What You're Protecting** section if the new technique is relevant (e.g., `Drown tests in docs (Technique 5)` ).
-
----
-
-### Step 3b: Add to Real-World AI Failures
-
-The `## Real-World AI Failures` section has two sub-sections. Classify the incident:
-
-- **`### Production Incidents`** — General AI/LLM failures: chatbot hallucinations, data leaks, research findings about AI misbehavior. NOT specifically about coding agents.
-- **`### Agent-Caused Production Destruction`** — Specific incidents where an AI *coding agent* (Claude Code, Cursor, Copilot, Replit AI, etc.) caused production damage through its own actions.
-
-Each entry follows this exact format:
-
-**English** (`README.md`):
-
-```markdown
-- **[Title describing the incident](url)**
-  (YYYY-MM) — Who/what happened. Key detail. Scale of damage.
-  Consequence or follow-up action.
-```
-
-**Chinese** (`README-zh.md`):
-
-```markdown
-- **[中文标题，描述事件](url)**
-  （YYYY-MM）——谁/发生了什么。关键细节。损害规模。
-  后果或后续行动。
-```
-
-**Style rules for incidents:**
-
-- Title is the link text — punchy, factual, names the agent/tool involved
-- Date in `(YYYY-MM)` format — if only year is known, use `(YYYY)`
-- Body: 2–3 sentences. First sentence = what happened. Second = why/how. Third = consequence.
-- No satire in the incident body — these are factual records, not jokes. The humor comes from the accumulated horror of reading them all.
-- Only the epigraph at the top of the section can be satirical.
-
-**Insertion point:** At the end of the appropriate sub-section, before any closing line like `*Know of another incident?*`.
-
-After adding, verify both READMEs have the same incidents in the same order.
-
----
-
-### Step 4: Verify Cross-Links
-
-For techniques: run `grep -c "^### [0-9]" README.md README-zh.md` to confirm both files have the same technique count. Check that all technique numbers in Alternative Angle sections are consistent.
-
-For incidents: visually confirm both files list the same incidents in the same order under each sub-section.
+Follow the cross-reference rules in `AGENTS.md` § Cross-Reference Rules → **A. When Adding a Technique**. That section covers insertion point, count update, layer assignment, defense objectives, and verification — do not duplicate those rules here.
 
 ---
 
@@ -149,7 +111,7 @@ This is the core. Every line must follow these principles. The style is modeled 
 
 1. **Second-person, conversational.** Use "you" / "we" / "your boss" — never third-person academic ("the agent fails to distinguish"). Talk directly to the reader like a jaded senior dev corrupting a junior over drinks.
 
-2. **Never explain the joke.** No emoji, no "this is satire" disclaimers in the technique body. The absurdity must stand on its own. The reader should only realize it's satire halfway through.
+2. **Never explain the joke.** No emoji, no "this is satire" disclaimers in the technique body. No meta-commentary like "Here's the thing," "说白了," or "你没破坏任何东西" — if a sentence tells the reader what the mechanism is, delete it. The absurdity must stand on its own. The reader should only realize it's satire halfway through.
 
 3. **No numbered lists.** Sub-sections flow as narrative paragraphs. Use bold lead-ins (**First, length.** / **Second, content.** / **Never update.**) — never `1.` `2.` `3.`.
 
@@ -170,7 +132,6 @@ This is the core. Every line must follow these principles. The style is modeled 
 ### Chinese Translation Style
 
 When translating to Chinese:
-
 - Maintain the exact same deadpan tone — 一本正经地胡说八道
 - Use colloquial Chinese ("你想想" / "说真的" / "更妙的是") not formal/academic Chinese
 - Preserve all concrete examples and technology names
@@ -189,40 +150,13 @@ When translating to Chinese:
 
 ---
 
-## Insertion Mechanics
+## Insertion and Cross-References
 
-### Finding the Insertion Point
-
-In `README.md`, insert right before this line:
-
-```markdown
-## Alternative Angle: By Attack Surface
-```
-
-In `README-zh.md`, insert right before this line:
-
-```markdown
-## 换个角度：按攻击面
-```
-
-### Updating Cross-References
-
-After inserting technique N (where N = current count + 1):
-
-1. **"N techniques above"** — In the first sentence of Alternative Angle: By Attack Surface, update the count.
-
-2. **Layer references** — In the By Attack Surface section, each layer lists technique numbers. If the new technique fits a layer, add N to the list:
-   - **Prompt Layer** — techniques about AGENTS.md, ADRs, docs, learning
-   - **Tool Layer** — techniques about hooks, config, permissions, feedback
-   - **Context Layer** — techniques about context, memory, history
-   - **Orchestration Layer** — techniques about agent architecture, workflow
-
-3. **What You're Protecting references** — If the new technique supports any of the four defense objectives (Make AI Code Unreviewable, Make AI Context Untrustworthy, Make the System Unsafe, Make the Boss Stop Believing in AI), add it to the relevant chain with `→`.
+See `AGENTS.md` § Cross-Reference Rules for insertion point, count update, layer assignment, defense objectives, and verification. Do not duplicate those rules here.
 
 ### Title Format
 
 Titles should be:
-
 - English: imperative, action-oriented, slightly absurd ("Turn AGENTS.md Into a Dumpster Fire", "Drown Tests in Documentation")
 - Chinese: matching the same energy — colloquial, vivid, slightly absurd ("把 AGENTS.md 变成垃圾场", "用文档淹死测试")
 

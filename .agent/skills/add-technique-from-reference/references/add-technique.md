@@ -2,6 +2,14 @@
 
 Follow this workflow when the reference describes a **failure-mode insight** — a general pattern, vulnerability, or anti-pattern in AI coding workflows that can be turned into a satirical technique.
 
+## Workflow
+
+1. **Deduplicate** — read all existing `### N.` techniques. If the insight overlaps with an existing technique, enrich existing or skip. Use `ask_user_question` if uncertain.
+2. **Draft** EN technique first, then ZH.
+3. **Insert** into both READMEs.
+4. **Update** cross-references (counts, layers, defense objectives).
+5. **Verify** with `grep -c`.
+
 ## Write the Technique
 
 Draft in English first, then translate to Chinese. Follow the style guide in the main `SKILL.md` (the **Writing Style — Deadpan Satire** section).
