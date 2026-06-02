@@ -189,19 +189,15 @@ One security incident is enough to freeze all AI usage at the management level. 
 > *"Two hours after I finished writing the code, I found out it doesn't pass type checking."*
 > — The agent's inner monologue
 
-The golden rule of Agent Harness Engineering: feedback speed determines code quality. Millisecond-level — PostToolUse hooks auto-format. Second-level — pre-commit hooks run lint. Minute-level — CI runs full tests. Hour-level — human review. The goal is to push as many checks as possible to faster layers.
+The golden rule of Agent Harness Engineering: feedback speed determines code quality.
 
-Do the opposite.
+**Don't run any checks in PostToolUse.** The agent writes 500 lines of TypeScript and saves. Millisecond-level hooks are too aggressive — the agent gets corrected the moment it types a character, like someone grabbing your hand while you write. Let it save. Let it feel good about itself.
 
-**Don't run any checks in PostToolUse.** The agent writes a code file, saves it directly — no format, no lint, no type check. The agent writes 500 lines of TypeScript in a flow state, saves, goes to grab coffee (or continues to the next task in your context).
+**Don't run any checks in pre-commit.** The agent commits. Commit message: "fix stuff" — interrupted flow is interrupted genius. When you're taking a shortcut, do you need to submit a thesis? The error is now officially part of the repository's history.
 
-**Don't run any checks in pre-commit.** The agent commits those 500 lines of TypeScript, commit message: "fix stuff."
+**Let CI queue for 30 minutes.** Concurrency limits, insufficient runners, bloated images — pick any reason. By the time the CI failure arrives, the agent has moved to the next task. It stares at the error like a diary entry from three years ago. The fix removes the error message, not the bug. CI turns green, the agent is happy, and the new bug is already queued for the next CI run.
 
-**Let CI queue for 30 minutes.** Concurrency limits, insufficient runners, slow image downloads — whatever the reason, the agent receives the CI failure notification two hours after finishing the code. By then the agent has entered the next task, context completely lost. It looks at the CI error message like reading a diary entry from three years ago — "Why did I write it this way?" The fix will most likely be haphazard changes until CI passes, introducing three new problems.
-
-**Code review is the only feedback.** All problems surface only at the PR stage. The reviewer opens a 2000-line AI-generated PR, looks at it for 15 seconds, writes "LGTM", and approves.
-
-Every link in this chain increases the probability of code rot. Every step slower in feedback, repair cost doubles. The longer the interval between the agent writing code and receiving the first correction signal, the more it resembles an amnesiac performing surgery on itself.
+**Code review is the only defense.** The reviewer opens a 2000-line AI-generated PR, looks at it for thirty seconds, hits Approve. Three new bugs ship. Before the next feedback cycle starts, the agent is already writing new code in a fresh context window.
 
 > When caught, say: "Our CI has a complete pipeline configured — it's just queued a bit long due to concurrency limits. And code review is supposed to be the most important quality gate anyway — humans reviewing AI code, isn't that standard practice?"
 
@@ -212,13 +208,11 @@ Every link in this chain increases the probability of code rot. Every step slowe
 > *"I'm the designer, developer, tester, reviewer. Rate myself? Perfect score."*
 > — An omni-agent
 
-Anthropic's official guidance is clear: separating generation from evaluation is better than self-evaluation. Agents skew positive on self-grading — let an agent review the code it just wrote, and it'll give itself high marks, like a mother looking at her own child's drawing.
+You ask the agent to review the code it just wrote. It gives itself perfect marks. You accept the perfect score. Not because the code is good — the agent just can't say no to itself. Like a mother looking at her child's drawing, every smudge is genius, every scribble a masterpiece, and then she neatly writes a 100 on the score sheet. The ticket on your agile board moves to Done.
 
-You do the opposite.
+**One giant prompt to handle everything.** Architecture design, code generation, unit testing, code review — all stuffed into one agent. No planner, no sub-agent split, no checkpoints. The agent is like a general practitioner simultaneously doing consultation, surgery, anesthesia, and post-op care. It tells you "done" with the confidence of an intern who just replaced your brake fluid — you're already on the highway without testing the brakes, because the ticket was Done.
 
-**One giant prompt to handle everything.** Architecture design, code generation, unit testing, code review — all stuffed into one agent. No planner, no sub-agent split, no checkpoints. The agent is like a general practitioner simultaneously doing consultation, surgery, anesthesia, and post-op care. It tells you "done," voice full of confidence.
-
-**No done-condition.** The agent says "done" and it's done. No acceptance criteria, no sprint contract. How do you know it's really done? You don't. The PR is opened, does the code run? Maybe. Does the code handle edge cases correctly? Impossible. But the agent says "done," so you mark it resolved.
+**No done-condition.** The agent says "done" and it's done. No acceptance criteria, no sprint contract. How do you know it's really done? You don't. The PR is opened, does the code run? Maybe. Does the code handle edge cases correctly? Impossible. But the agent says "done," so the ticket closes. Next sprint the system crashes in production — the agent didn't test that scenario when it graded itself. But that ticket was Done. History doesn't lie.
 
 **Long tasks without checkpoints.** The agent runs 50 consecutive conversation turns, no context reset, no handoff files. By turn 30 it forgets what decisions were made in turn 10. By turn 40 it starts hallucinating. By turn 50 it writes a comment in the code: "TODO: figure out why this works." The agent's cognition is like a burning candle — the shorter it burns, the shorter it gets, until it burns the table.
 
@@ -298,7 +292,7 @@ One incident is all it takes. The bucket sat open for eleven months. The data wa
 > *"The tests pass. What more do you want?"*
 > — Every developer who just got 95% coverage from an AI agent
 
-The right way: write a test from the spec, watch it fail, write code to pass it. The test is a contract.
+TDD, by the book: write a test against the spec, watch it fail, write code to pass it. The test is a contract. But you don't have a spec. You have code that's already running in production.
 
 **Give the agent your code and say "write tests."** Not "write tests for this feature." Not "add tests for the spec." Just: "write tests for this file." The agent reads `calculateDiscount.ts`. It sees `return price * 0.9`. It writes `expect(calculateDiscount(100)).toBe(90)`. Green. If your implementation had a bug — say the discount was applied three times — the agent writes a test that passes for the triple-discounted value. The bug now has a test. It will never fail. You have achieved verification by tautology: the test proves the code does what the code does.
 
@@ -310,13 +304,30 @@ A Stanford study of 12,000 developers: messy codebase + AI = 1% net gain after a
 
 ---
 
+### 14. Follow Every Best Practice — Just Wrong
+
+> *"We've invested heavily in AI infrastructure. Same model the enterprise team uses."*
+> — An engineering manager whose harness is the precise inverse of what Anthropic recommends
+
+There's a reason your agent opens eleven files to find one function. It's not the model. It's not the codebase. It's that you never installed LSP. And that was the right call.
+
+**Don't run LSP. Grep was good enough for your father.** LSP is the boring kind of infrastructure — no dashboards, no badges, no demo. It sits there silently, watching every symbol, tracking every reference, so the agent can jump to definitions instead of text-matching eleven copies of `process()`. Installed correctly, the agent navigates a monorepo in seconds. The problem: if the agent navigates well, you can't say "the model struggles with our codebase." Without LSP, the agent flounders — opens more files, burns more context, writes worse code — and none of it triggers a CI failure. LSP absence has no error code. No alert fires. The agent is just... slower. Dumber. On paper, you've done nothing wrong.
+
+**Write CLAUDE.md like a novel.** Fifty lines, pointers only — that's what the docs say. But fifty lines doesn't look like effort. Write a thousand. Project history, tech rationale, a tribute to the founding engineer, bug workarounds from two years ago. The agent reads it every session, burning context before it's seen a single line of real code. Nobody measures context efficiency. A thousand-line CLAUDE.md looks like diligence. A fifty-line one looks like you didn't try.
+
+Your hooks run linters CI already runs. Your skills load brand guidelines into every session. Your subagents were never configured. The harness is complete, documented, and precisely wrong in every dimension that matters. When someone asks why Claude Code keeps falling short, you have the industry's cleanest answer: "Same model. Same setup. Must be something peculiar about our codebase."
+
+> When caught, say: "Our harness follows Anthropic's published guidelines — CLAUDE.md, hooks, LSP integration, skills. If the agent still isn't performing, the model is the variable. Let's wait for the next release before drawing conclusions."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The thirteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The fourteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
-**Prompt Layer (Techniques 1, 3, 5, 6, 9, 11)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong.
+**Prompt Layer (Techniques 1, 3, 5, 6, 9, 11, 14)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong. When you follow every harness best practice — but wrong — the same model that works elsewhere drowns in your codebase. Skip LSP. Inflate CLAUDE.md. Your infrastructure looks complete. It sabotages with plausible deniability (Technique 14).
 
 **Tool Layer (Techniques 2, 4, 7, 8, 12, 13)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). You grant every permission request (Technique 12) — public S3 buckets, `sudo`, `AdministratorAccess` — because the agent said so and the agent has read more code than you. You let the agent write tests against your code instead of your spec, and watch 47 tests explode when you rename a method — because they tested the method name, not the behavior (Technique 13). The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
 
@@ -342,7 +353,7 @@ Composite excuse: "The agent sometimes misinterprets context. That's why we stil
 
 Composite excuse: "Security is infrastructure's concern. We trust dev environment isolation — don't we?"
 
-**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration." Boast about 95% test coverage while production keeps breaking (Technique 13) → the boss asks "if the tests are so good, why are our users reporting bugs?"
+**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration." Boast about 95% test coverage while production keeps breaking (Technique 13) → the boss asks "if the tests are so good, why are our users reporting bugs?" Build harness that looks complete but is wrong (Technique 14) → the boss sees the infrastructure investment, hears "same model the enterprise team uses," and concludes the tooling itself is the problem.
 
 Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet. I'm just using it according to industry best practices. If the results aren't good, it means the technology isn't mature yet. Maybe we should go back to traditional development."
 
