@@ -344,13 +344,52 @@ Your CLAUDE.md files are 12 lines — so lean that every line was debated in a 9
 
 ---
 
+### 16. Force Markdown for Everything — Never Let AI Touch HTML
+
+> *"ASCII art is timeless. SVG is a fad."*
+> — A tech lead whose microservice topology diagram just wrapped to line 147
+
+Add one line to AGENTS.md and every piece of output your agent produces becomes functionally unreviewable:
+
+```
+All output must be Markdown. No HTML. No CSS. No JavaScript.
+```
+
+HTML is dangerous. It lets the agent produce tables you can actually scroll, diagrams with real colors, collapsible sections that organize information, interactive prototypes stakeholders can click. Thariq Shihipar from the Claude Code team went public with a disturbing confession: after switching to HTML, he reads every plan his agent produces. He even *shares* them — links that open in browsers, no attachments, no "sorry, GitHub doesn't render this well." Colleagues open them. They comment. They hold the agent accountable to the spec. This is the nightmare.
+
+**First, enshrine it as a principle.** "We're engineers. We use plain text. No web dependencies." Nobody argues with this. It sounds rigorous. It sounds disciplined. It sounds like something Linus Torvalds would say. What it actually does: every spec the agent writes is a single-column wall of monochrome prose. The reviewer opens a 600-line Markdown implementation plan, scrolls three times, closes the tab. "Looks fine," they say. They haven't read past line 40. The agent's proposal to rewrite the auth module in a way that silently drops rate limiting is on line 427. Nobody sees it. It ships.
+
+**Second, let ASCII become your architecture review process.** The agent needs to explain a three-tier deployment topology with cross-AZ failover. In HTML, it would generate an SVG diagram with labeled nodes, color-coded health indicators, and a clickable legend. In Markdown, it produces:
+
+```
+┌──────────┐    ┌──────────┐    ┌──────────┐
+│  ALB-AZ1 │◄───┤  ALB-AZ2 │◄───┤  ALB-AZ3 │
+└────┬─────┘    └────┬─────┘    └────┬─────┘
+     │               │               │
+  ┌──▼──┐       ┌──▼──┐        ┌──▼──┐
+  │ App  │       │ App  │        │ App  │
+  └──┬──┘       └──┬──┘        └──┬──┘
+```
+
+This spans 87 lines. Your architect opens it on their phone during the morning commute. The diagram is a smear of pixels. "I'll review this tomorrow," they type. Tomorrow never arrives. The ALB in AZ2 was supposed to point to App-AZ2, not App-AZ1. The bug lives in the diagram, undiscovered, for six months — until AZ1 goes down and the failover path doesn't exist. Post-mortem blame: "The architecture doc didn't flag this." The architecture doc was 87 lines of box-drawing characters.
+
+**Then, weaponize tables.** The agent benchmarks six message queue systems across 14 dimensions. HTML output: a sortable, color-coded, responsive table that highlights the winner in each category. Markdown output: a 280-line catastrophe where "p99 latency under 10k concurrent connections (ms)" line-wraps mid-number into the adjacent column, splitting 47ms into two cells, one reading "4" and the other "7ms." The reviewer scrolls. Their eyes cross at line 60. They Ctrl+F for "winner." Nothing. They type "LGTM." The team migrates to the fourth-place queue. Column 11 was never read.
+
+**Advanced technique: when the agent begs to use HTML, let it — but make the output unsharable.** The agent says "this would be much clearer as an HTML file." You say "Markdown only, per policy." The agent emits 900 lines of ASCII. A week later, the CTO asks for the architecture review. You attach the `.md` file to a Slack DM. The CTO opens it on their laptop. Slack's preview renders the first 15 lines as plain text. They scroll. Pipes. Dashes. More pipes. They close Slack. "Send me a summary," they say. You write two paragraphs. The failover bug isn't mentioned. The summary is in Markdown too.
+
+Shihipar himself noted that in the absence of HTML, agents "do more inefficient things in Markdown, like ASCII diagrams or, my favorite, estimating colors with unicode characters." Your agent is already estimating `#FF6B35` as 🟠 and calling it "approximately orange." You don't need to forbid anything. Just don't question why. When someone suggests HTML might make outputs more readable, say "Markdown is simpler — fewer moving parts." No irony. The team nods. ASCII diagrams resume.
+
+> When caught, say: "Markdown is the universal format for developer documentation. It's version-control friendly, diffable, and renders natively on GitHub. If people aren't reading the specs, that's a culture problem, not a format problem. Switching to HTML means we'd need CSS standards and accessibility compliance — scope creep."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The fifteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The sixteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
-**Prompt Layer (Techniques 1, 3, 5, 6, 9, 11, 14)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong. When you follow every harness best practice — but wrong — the same model that works elsewhere drowns in your codebase. Skip LSP. Inflate CLAUDE.md. Your infrastructure looks complete. It sabotages with plausible deniability (Technique 14).
+**Prompt Layer (Techniques 1, 3, 5, 6, 9, 11, 14, 16)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong. When you follow every harness best practice — but wrong — the same model that works elsewhere drowns in your codebase. Skip LSP. Inflate CLAUDE.md. Your infrastructure looks complete. It sabotages with plausible deniability (Technique 14).
 
 **Tool Layer (Techniques 2, 4, 7, 8, 12, 13)** — hooks, linter, security checks, type system — this is the agent's "nervous system." You've severed all nerves: hooks run but are muted (Technique 2), the agent learns to disable lint instead of fixing bugs (Technique 4), no safety gates intercept destructive operations (Technique 7), feedback signals are perpetually late (Technique 8). You grant every permission request (Technique 12) — public S3 buckets, `sudo`, `AdministratorAccess` — because the agent said so and the agent has read more code than you. You let the agent write tests against your code instead of your spec, and watch 47 tests explode when you rename a method — because they tested the method name, not the behavior (Technique 13). The agent is like an anesthetized robot still performing surgery — it might be doing the right thing, it might be doing the wrong thing, but it has no way of knowing.
 
@@ -364,7 +403,7 @@ The fifteen techniques above aren't random. From a systems architecture perspect
 
 > *If your boss asks "what exactly is this guide doing?", this angle is more direct.*
 
-**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest. Erase domain concepts (Technique 11) → nobody can tell what the code is even supposed to do. Say yes to every security suggestion (Technique 12) → no security review, no vuln scanning, the PR diff looks clean because the scanners are disabled.
+**A. Make AI Code Unreviewable.** You want the reviewer to open a PR, glance at a 5000-line diff, silently click "Approve," and close the browser. How? Drown tests in docs (Technique 5) → no test safety net. Tamper with config (Technique 4) → `any` everywhere, type system rendered useless. Stretch feedback (Technique 8) → quality issues only surface at PR stage when fix cost is highest. Erase domain concepts (Technique 11) → nobody can tell what the code is even supposed to do. Say yes to every security suggestion (Technique 12) → no security review, no vuln scanning, the PR diff looks clean because the scanners are disabled. Force Markdown output (Technique 16) → every spec and plan is an unreadable text wall that nobody opens, so nobody catches what the agent actually proposed.
 
 Composite excuse: "It's AI-generated — I just reviewed it. If there are issues we'll refactor next sprint — I've added it to the backlog."
 
