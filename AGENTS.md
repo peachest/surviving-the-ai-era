@@ -62,4 +62,4 @@ Add to `references/index.md` under the appropriate category:
 
 ## Writing Style
 
-See `.agent/skills/add-technique-from-reference/SKILL.md` for the full writing style guide (deadpan satire rules, technique structure, Chinese translation conventions).
+See `.agent/references/writing-style.md` for the full writing style guide (technique structure, deadpan satire rules, Chinese translation conventions, anti-patterns).
