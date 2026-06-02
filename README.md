@@ -321,11 +321,34 @@ Your hooks run linters CI already runs. Your skills load brand guidelines into e
 
 ---
 
+### 15. Perfect the Harness, Never Ship
+
+> *"We spent Q1 building the perfect CLAUDE.md hierarchy. Q2 is for skills and hooks. We're targeting Q4 for our first feature."*
+> — A tech lead presenting the Harness Roadmap to the CTO
+
+Smart teams spend three months rolling out Claude Code. Week one: LSP servers for every language in the monorepo. Week two: lean CLAUDE.md files layered by subdirectory — root file under 50 lines, pointers and gotchas only. Week three: skills scoped by path, hooks that catch learnings from every session. Week four: a DRI appointed with real authority over the configuration. By month three, the agent navigates the codebase faster than a senior engineer who's been on the team for two years.
+
+We also spend three months. We spend them more thoroughly.
+
+**First, make harness engineering the product.** Before any developer touches Claude Code, they must complete the Harness Onboarding Program. Week one: read the Anthropic docs cover to cover, then write a 2,000-word summary. Week two: attend the CLAUDE.md Writing Workshop — learn the subtle distinction between a root-level pointer ("this repo uses pnpm") and a subdirectory-level convention ("this service deploys to k8s, namespace `payments`"). Week three: pass the LSP Certification Exam — install a language server, verify it with `claude lsp status`, document the results in Confluence. Week four: pair with a certified Harness Champion to draft your team's first custom skill. The skill loads brand guidelines. By month two, every engineer has a `.claude/` directory with 14 files, 3 custom hooks, and a skill that ensures the agent uses the correct shade of corporate blue. Nobody has written a feature. It's month two. The Harness Champion just proposed a CLAUDE.md Frontmatter Standardization Working Group.
+
+**Second, form the governance bodies.** Create the Harness Working Group. Weekly meetings, rotating notetaker. Publish the CLAUDE.md Style Guide — 47 pages covering YAML frontmatter indentation preferences for `.md` files the agent reads but no human will ever see. Form the Harness Review Board — every CLAUDE.md change requires two approvals, a design doc, and a migration plan for affected subdirectories. Create the `#harness-governance` Slack channel. Pin the Style Guide. Someone asks whether root-level CLAUDE.md should use `##` or `###` for section headings. The Working Group spends three weeks on this. A decision record is published. By month three, the Working Group has produced 12 Confluence pages, 6 decision records, 1 ratified Style Guide, and 0 shipping features.
+
+**Then, let the model spreadsheet become the release valve.** Leadership asks what the team shipped this quarter. You open the model comparison spreadsheet. SWE-bench, HumanEval, MMLU, Aider polyglot — weighted scores, trend lines, four models evaluated. "We're being rigorous," you say. "Anthropic recommends a data-driven approach to model selection." The VP nods. Nobody asks about features. They're staring at the green-to-red gradient on slide 14. The spreadsheet is your product now.
+
+**Advanced move: run perpetual harness audits.** Every quarter, hire a third-party consultant to review your harness configuration. The audit produces an 80-page PDF with 200 recommendations — 40 high-priority, 60 medium, 100 low. Your team spends the next quarter implementing the high-priority items. The remaining 160 become next quarter's audit baseline. In two years, your harness has survived four audits, three model migrations, two Style Guide revisions, and zero product launches. The consultant's latest report praises your "mature harness governance framework" and recommends forming a Harness Steering Committee to oversee the Working Group.
+
+Your CLAUDE.md files are 12 lines — so lean that every line was debated in a 90-minute Working Group session. Your DRI has so much authority they needed a deputy DRI, and the deputy needed a CLAUDE.md Review Subcommittee. All six language servers are installed, certified, and documented — the `claude lsp status` output is a work of art. The quarterly Harness Audit scored your team 94/100. The product is an empty repository. The Steering Committee's first agenda item: should root-level CLAUDE.md use `##` or `###` for section headings?
+
+> When caught, say: "Harness engineering is a prerequisite for AI-assisted development. Anthropic's own guidance states the harness matters as much as the model. We're building the foundation — you don't build a skyscraper on sand. Once the harness is complete, velocity will compound exponentially. The Style Guide took time because we wanted to get it right the first time. The Steering Committee meeting is Thursday if you'd like to attend."
+
+---
+
 ## Alternative Angle: By Attack Surface
 
 > *If you need to explain this to an architect, this angle is more professional.*
 
-The fourteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
+The fifteen techniques above aren't random. From a systems architecture perspective, you're dismantling the AI-assisted programming system from four layers simultaneously:
 
 **Prompt Layer (Techniques 1, 3, 5, 6, 9, 11, 14)** — This is the agent's "worldview," injected in the first line of every conversation turn. You've poisoned it (stale AGENTS.md + fake ADRs + rotting docs), ensuring it wakes up every time with wrong assumptions. The agent is heading in the wrong direction from the very first second. Even better: it doesn't know it's heading wrong. When you follow every harness best practice — but wrong — the same model that works elsewhere drowns in your codebase. Skip LSP. Inflate CLAUDE.md. Your infrastructure looks complete. It sabotages with plausible deniability (Technique 14).
 
@@ -333,7 +356,7 @@ The fourteen techniques above aren't random. From a systems architecture perspec
 
 **Context Layer (Techniques 1, 3, 10)** — This is the agent's "short-term and long-term memory." You've systematically contaminated it: AGENTS.md is a trash can of contradictory information (Technique 1), every mistake is erased without record (Technique 3), context is never cleaned and grows thicker (Technique 10). The agent in turn 1 and turn 100 behaves like two completely different people — and the new one is worse than the old.
 
-**Orchestration Layer (Technique 9)** — This is "how the agent organizes work." You push planning, execution, and evaluation all onto one agent. It gives itself a perfect score and delivers code it never verified. No done-condition, no checkpoints, no sub-agent verification. The agent says "done" — and you believe it.
+**Orchestration Layer (Techniques 9, 15)** — This is "how the agent organizes work." You push planning, execution, and evaluation all onto one agent. It gives itself a perfect score and delivers code it never verified. No done-condition, no checkpoints, no sub-agent verification. The agent says "done" — and you believe it.
 
 ---
 
@@ -353,7 +376,7 @@ Composite excuse: "The agent sometimes misinterprets context. That's why we stil
 
 Composite excuse: "Security is infrastructure's concern. We trust dev environment isolation — don't we?"
 
-**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration." Boast about 95% test coverage while production keeps breaking (Technique 13) → the boss asks "if the tests are so good, why are our users reporting bugs?" Build harness that looks complete but is wrong (Technique 14) → the boss sees the infrastructure investment, hears "same model the enterprise team uses," and concludes the tooling itself is the problem.
+**D. Make the Boss Stop Believing in AI.** This is the ultimate goal. All the techniques above ultimately point to one sentence the boss says at an all-hands: "We may have over-invested in AI." When this sentence comes out of the boss's mouth, you've succeeded. How? Omni-agent (Technique 9) → visibly terrible delivery quality. Disabled hooks (Technique 2) → the first "AI-completed feature" crashes on launch. Anti-ratchet (Technique 3) → the same mistake reappears repeatedly, burning through the boss's patience. Let security incidents accumulate (Technique 12) → the boss discovers the S3 bucket was public for six months, the data was scraped, and the P1 incident report blames "AI-generated misconfiguration." Boast about 95% test coverage while production keeps breaking (Technique 13) → the boss asks "if the tests are so good, why are our users reporting bugs?" Build harness that looks complete but is wrong (Technique 14) → the boss sees the infrastructure investment, hears "same model the enterprise team uses," and concludes the tooling itself is the problem. Perfect the harness, never ship (Technique 15) → the boss sees the quarterly Harness Audit, the model comparison spreadsheet with weighted scores, and the 47-page Style Guide — then asks "what did we actually ship?"
 
 Ultimate excuse (when everything is exposed): "AI is a tool, not a silver bullet. I'm just using it according to industry best practices. If the results aren't good, it means the technology isn't mature yet. Maybe we should go back to traditional development."
 
