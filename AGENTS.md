@@ -4,12 +4,12 @@
 
 Two canonical READMEs, always kept in sync:
 
-| File | Language | Purpose |
-|------|----------|---------|
-| `README.md` | English | Techniques, Alternative Angles, Real-World Failures |
-| `README-zh.md` | Chinese | Same content, translated in deadpan satire style |
-| `references/index.md` | English | Curated external references with URLs + descriptions |
-| `.agent/skills/add-technique-from-reference/` | — | Skill for adding content from external URLs |
+| File                                          | Language | Purpose                                              |
+| --------------------------------------------- | -------- | ---------------------------------------------------- |
+| `README.md`                                   | English  | Techniques, Alternative Angles, Real-World Failures  |
+| `README-zh.md`                                | Chinese  | Same content, translated in deadpan satire style     |
+| `references/index.md`                         | English  | Curated external references with URLs + descriptions |
+| `.agent/skills/add-technique-from-reference/` | —        | Skill for adding content from external URLs          |
 
 ## Cross-Reference Rules
 
@@ -44,6 +44,7 @@ When adding a **new technique** or **new incident**, update ALL of these locatio
    - `### Agent-Caused Production Destruction` — coding agent caused specific damage
 
 2. **Format**:
+
    ```markdown
    - **[Title](url)**
      (YYYY-MM) — What happened. Key detail. Consequence.
@@ -56,6 +57,7 @@ When adding a **new technique** or **new incident**, update ALL of these locatio
 ### C. When Adding a Reference URL
 
 Add to `references/index.md` under the appropriate category:
+
 ```markdown
 - **[Title](url)** — One-sentence description.
 ```

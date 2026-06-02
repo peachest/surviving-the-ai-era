@@ -351,7 +351,7 @@ Your CLAUDE.md files are 12 lines — so lean that every line was debated in a 9
 
 Add one line to AGENTS.md and every piece of output your agent produces becomes functionally unreviewable:
 
-```
+```text
 All output must be Markdown. No HTML. No CSS. No JavaScript.
 ```
 
@@ -361,7 +361,7 @@ HTML is dangerous. It lets the agent produce tables you can actually scroll, dia
 
 **Second, let ASCII become your architecture review process.** The agent needs to explain a three-tier deployment topology with cross-AZ failover. In HTML, it would generate an SVG diagram with labeled nodes, color-coded health indicators, and a clickable legend. In Markdown, it produces:
 
-```
+```text
 ┌──────────┐    ┌──────────┐    ┌──────────┐
 │  ALB-AZ1 │◄───┤  ALB-AZ2 │◄───┤  ALB-AZ3 │
 └────┬─────┘    └────┬─────┘    └────┬─────┘

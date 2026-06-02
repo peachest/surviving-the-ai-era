@@ -33,6 +33,7 @@ The `## Real-World AI Failures` section has two sub-sections:
 ### `### Production Incidents`
 
 General AI/LLM failures. **NOT** specifically about coding agents. Examples:
+
 - Chatbot hallucinations that caused legal liability
 - Employees leaking secrets to ChatGPT
 - Research findings about AI misbehavior
@@ -40,6 +41,7 @@ General AI/LLM failures. **NOT** specifically about coding agents. Examples:
 ### `### Agent-Caused Production Destruction`
 
 Specific incidents where an AI **coding agent** (Claude Code, Cursor, Copilot, Replit AI, etc.) caused production damage through its own autonomous actions. Examples:
+
 - Agent deleted a production database
 - Agent force-pushed over main branch
 - Agent executed destructive shell commands on a live server
@@ -50,7 +52,7 @@ Place the incident in the correct sub-section.
 
 If the incident involves both a coding agent and a broader AI system, or you're unsure which sub-section fits better, use `ask_user_question`:
 
-```
+```text
 question: "This incident involves [describe]. Which sub-section does it belong in?"
 header: "Classify"
 options:
@@ -92,7 +94,7 @@ options:
 
 If the entry feels too vague, too long, or missing key details, use `ask_user_question`:
 
-```
+```text
 question: "Current draft: [show entry]. Does this capture the incident well?"
 header: "Draft check"
 options:
@@ -110,6 +112,7 @@ Use `read` to find the exact insertion point in each file, then use `edit` to ad
 ## Step 4: Verify
 
 After adding to both READMEs, confirm:
+
 - Both files list the same incidents in the same order under each sub-section
 - Dates are consistent between languages
 - Links are identical
