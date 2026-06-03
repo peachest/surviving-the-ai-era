@@ -2,6 +2,9 @@
   "ignorePatterns": [
     {
       "pattern": "^https://github.com/peachest/surviving-the-ai-era"
+    },
+    {
+      "pattern": "^https://www.contributor-covenant.org"
     }
   ],
   "replacementPatterns": [],
@@ -10,5 +13,11 @@
   "retryOn429": true,
   "retryCount": 3,
   "fallbackRetryDelay": "30s",
-  "aliveStatusCodes": [200, 206, 403, 429]
+  "aliveStatusCodes": [
+    200,
+    206,
+    403,
+    412,
+    429
+  ]
 }
